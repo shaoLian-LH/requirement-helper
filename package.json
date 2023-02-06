@@ -1,0 +1,83 @@
+{
+  "name": "requirement-helper",
+  "displayName": "需求小助手",
+  "description": "一个通过扫描注释行从对应平台获取信息的插件",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "requirement-helper",
+      "properties": {
+        "requirement-helper.defaultRequirementManager": {
+          "order": 0,
+          "type": "string",
+          "enum": [
+            "zentao"
+          ],
+          "default": "zentao",
+          "description": "选择默认连接的需求管理平台"
+        },
+        "requirement-helper.zentao.address": {
+          "order": 1,
+          "type": "string",
+          "default": "http://localhost:3080",
+          "description": "禅道地址"
+        },
+        "requirement-helper.zentao.token": {
+          "order": 1,
+          "type": "string",
+          "description": "禅道Token，当你填写此行信息时，不需要额外填写登录名和密码"
+        },
+        "requirement-helper.zentao.account": {
+          "order": 2,
+          "type": "string",
+          "default": "admin",
+          "description": "禅道登录用户名"
+        },
+        "requirement-helper.zentao.pwd": {
+          "order": 3,
+          "type": "string",
+          "default": "*¥B114514y",
+          "description": "禅道登录密码"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "precompile": "node ./script/copyFile.js",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "prewatch": "node ./script/copyFile.js",
+    "pretest": "yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/lodash": "^4.14.191",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "@vscode/test-electron": "^2.1.5",
+    "eslint": "^8.20.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "axios": "^1.3.0",
+    "lodash": "^4.17.21"
+  }
+}
