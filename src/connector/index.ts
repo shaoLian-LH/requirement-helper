@@ -7,7 +7,7 @@ export class PlatformConnector {
   private _maybeValid: boolean;
 
   private connectionInfoIsValid() { 
-    const { account, pwd, token } = this._userInfo;
+    const { account, pwd } = this._userInfo;
     const addressIsValid = () => { 
       const { address } = this._platform;
       if (!address) {
@@ -21,7 +21,7 @@ export class PlatformConnector {
 
       return Boolean(addressSimpleCheck);
     };
-    const isValid = (Boolean(token) || (Boolean(account) && Boolean(pwd))) && addressIsValid();
+    const isValid = (Boolean(account) && Boolean(pwd)) && addressIsValid();
     this._maybeValid = isValid;
     return isValid;
   }

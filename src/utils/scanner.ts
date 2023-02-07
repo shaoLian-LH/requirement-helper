@@ -2,7 +2,7 @@ import { Requirement, RequirementType } from "../types/connector";
 import * as vscode from 'vscode';
 
 const COMMENT_REGEX = /(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+)|(\/\/.*)/igm;
-const REQUIREMENT_TAG_REGEX = /\[(story|bug|case)\]\s?#([1-9]*)/igm;
+const REQUIREMENT_TAG_REGEX = /\[(story|bug|case|task)\]\s?#([1-9]*)/igm;
 
 const getAllComment = (text: string) => { 
   return text.match(COMMENT_REGEX);

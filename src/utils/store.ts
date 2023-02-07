@@ -33,9 +33,17 @@ export class SimpleStore {
     return set(this._store, targetKey, value);
   }
 
+  setGlobalValue(key: string, value: any) { 
+    return set(this._store, `global.${key}`, value);
+  }
+
   getValue(key: string, scope: string | undefined = this._defaultScope) { 
     let targetKey = scope ? `${scope}.${key}` : key;
     return get(this._store, targetKey);
+  }
+
+  getGlobalValue(key: string) { 
+    return get(this._store, `global.${key}`);
   }
 
   reset() { 

@@ -3,33 +3,41 @@ import * as vscode from 'vscode';
 import { scanText } from './utils/scanner';
 import { subscribeDisposables } from './utils';
 import { addDiagnosticsForCollection, highlightRequirementArea } from './utils/decoration';
-import { updateTagInfos } from './utils/tagOperations';
+import { fillTagInfosFromServer, updateTagInfos } from './utils/tagOperations';
+import { getDefaultConnector } from './connector/utils';
 
-const initRequirementDiagnostics = (context: vscode.ExtensionContext) => { 
+export const addRequirementDiagnostics = (context: vscode.ExtensionContext) => { 
 	const requirementDiagnostics = vscode.languages.createDiagnosticCollection("requirementDiagnostics");
 	subscribeDisposables(context, requirementDiagnostics);
+	vscode.workspace.onDidCloseTextDocument((doc) => { 
+		requirementDiagnostics.delete(doc.uri);
+	});
 	return requirementDiagnostics;
 };
 
-const addSaveScanner = (
+export const addSaveScanner = (
 	context: vscode.ExtensionContext,
 	requirementDiagnostics: vscode.DiagnosticCollection
 ) => { 
 	const scanAfterSaving = vscode.workspace.onDidSaveTextDocument((textDocument) => { 
+		const defaultConnector = getDefaultConnector();
+		const scopeName = defaultConnector.platformInfo.name;
+	
 		const requirementSettings = scanText(textDocument);
-		const affectedSettings = updateTagInfos(requirementSettings);
+		const affectedSettings = updateTagInfos(
+			requirementSettings,
+			scopeName
+		);
 		const targetEditor = vscode.window.activeTextEditor;
 		
 		if (!targetEditor) { return; }
 		
 		highlightRequirementArea(targetEditor, affectedSettings);
-		addDiagnosticsForCollection(targetEditor, affectedSettings, requirementDiagnostics);
+		fillTagInfosFromServer(affectedSettings, scopeName)
+			.then((pressedInfos) => { 
+				addDiagnosticsForCollection(targetEditor, pressedInfos, requirementDiagnostics);
+			});
 	});
 
 	subscribeDisposables(context, scanAfterSaving);
-};
-
-export const extensionInitial = (context: vscode.ExtensionContext) => { 
-  const requirementDiagnostics = initRequirementDiagnostics(context);
-  addSaveScanner(context, requirementDiagnostics);
 };

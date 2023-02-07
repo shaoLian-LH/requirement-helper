@@ -27,7 +27,7 @@ yarn // 安装依赖
 ### 禅道的准备
 1. 首先使用 `docker-compose up -d` 启动一个本地的禅道镜像
 2. 访问 `http://localhost:3080` 初始化禅道信息
-3. 设置 `admin` 的密码为 `*¥B114514y`
+3. 设置 `admin` 的密码为 `#3Devops*`
 4. 等待禅道准备完成
 5. 在 `package.json` 确认默认值是否正确
 

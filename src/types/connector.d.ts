@@ -2,7 +2,6 @@ import type { Position } from 'vscode'
 export interface UserInfo { 
   account: string
   pwd: string
-  token?: string
 }
 
 export interface PlatformSetting { 
@@ -25,4 +24,11 @@ export interface Requirement {
     start: Position
     end: Position
   }
+}
+
+export interface PressedRequirementInfo { 
+  id: string
+  title: string
+  desc: string
+  ref: Requirement
 }

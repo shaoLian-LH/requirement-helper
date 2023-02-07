@@ -7,16 +7,21 @@ const prefix = (zentao.address || '') + '/api.php/v1';
 const { get, post, patch, put } = requestFactory(
   prefix,
   {
-    request: (req) => { 
+    request: (req) => {
       const zentaoStore = new SimpleStore('zentao');
       return {
         ...req,
-        'Token': zentaoStore.getValue('token') || ''
+        headers: {
+          'Token': zentaoStore.getValue('token') || ''
+        }
       };
+    },
+    response: (resp) => {
+      return resp;
     }
   }
 );
 
-export { 
+export {
   get, post, patch, put
 };

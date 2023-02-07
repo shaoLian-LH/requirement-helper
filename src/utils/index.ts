@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { NAVIGATE_TO_CONFIGURATION } from '../enums/tips';
 import { EXTENSION_FLAG } from '../enums/const';
 import type { MessageType, PlatformBaseSetting } from '../types/common';
-import { ZentaoConnector } from '../connector/zentao';
 
 export const openExtensionSetting = (ext: string | null | undefined) => { 
   let options = EXTENSION_FLAG;
@@ -68,7 +67,7 @@ export const getExtensionConfiguration = () => {
 		pwd: zentaoSetting.pwd || ''
   };
 
-	return { platformInfo, userInfo, zentao };
+	return { platformInfo, userInfo, zentao, enable: config.get<boolean>('defaultEnable') };
 };
 
 export const commandRegister = (
@@ -77,7 +76,8 @@ export const commandRegister = (
   action: (...items: any) => any
 ) => { 
   let disposable = vscode.commands.registerCommand(`${EXTENSION_FLAG}.${cmd}`, action);
-	context.subscriptions.push(disposable);
+  context.subscriptions.push(disposable);
+  return disposable;
 };
 
 export const subscribeDisposables = (
@@ -85,4 +85,13 @@ export const subscribeDisposables = (
   ...disposables: vscode.Disposable[]
 ) => { 
   context.subscriptions.push(...disposables);
+};
+
+export const transToJson = (maybeJSON: string) => { 
+  try { 
+    return JSON.parse(maybeJSON);
+  } catch (e) { 
+    console.log('transToJson err - ', e);
+    return maybeJSON;
+  }
 };

@@ -22,7 +22,7 @@ const makePatch = <O = any, D = any>(request: AxiosInstance, url: string, data: 
 export const requestFactory = (
   baseUrl: string,
   interceptors?: {
-    request?: (req: AxiosRequestConfig) => any,
+    request?: (req: AxiosRequestConfig) => AxiosRequestConfig | any,
     response?: (resp: AxiosResponse | any) => any
   }
 ) => { 
@@ -49,10 +49,10 @@ export const requestFactory = (
   }
 
   return {
-    get: <O = any, D = any>(url: string, params: any, options?: AxiosRequestConfig) => makeGet<O, D>(instance, url, params, options),
-    post: <O = any, D = any>(url: string, data: any, options?: AxiosRequestConfig) => makePost<O, D>(instance, url, data, options),
-    put: <O = any, D = any>(url: string, data: any, options?: AxiosRequestConfig) => makePut<O, D>(instance, url, data, options),
-    patch: <O = any, D = any>(url: string, data: any, options?: AxiosRequestConfig) => makePatch<O, D>(instance, url, data, options),
+    get: <O = any, D = any>(url: string, params?: any, options?: AxiosRequestConfig) => makeGet<O, D>(instance, url, params, options),
+    post: <O = any, D = any>(url: string, data?: any, options?: AxiosRequestConfig) => makePost<O, D>(instance, url, data, options),
+    put: <O = any, D = any>(url: string, data?: any, options?: AxiosRequestConfig) => makePut<O, D>(instance, url, data, options),
+    patch: <O = any, D = any>(url: string, data?: any, options?: AxiosRequestConfig) => makePatch<O, D>(instance, url, data, options),
   };
 };
 

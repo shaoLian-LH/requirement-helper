@@ -14,11 +14,27 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "requirement-helper.enable",
+        "title": "启动扫描（requirement-helper）"
+      },
+      {
+        "command": "requirement-helper.re-connect",
+        "title": "重新启动需求助手（requirement-helper）"
+      }
+    ],
     "configuration": {
       "title": "requirement-helper",
       "properties": {
-        "requirement-helper.defaultRequirementManager": {
+        "requirement-helper.defaultEnable": {
           "order": 0,
+          "type": "boolean",
+          "default": true,
+          "description": "默认启动扫描（启动命令为：requirement-helper.enable）"
+        },
+        "requirement-helper.defaultRequirementManager": {
+          "order": 1,
           "type": "string",
           "enum": [
             "zentao"
@@ -27,26 +43,21 @@
           "description": "选择默认连接的需求管理平台"
         },
         "requirement-helper.zentao.address": {
-          "order": 1,
+          "order": 2,
           "type": "string",
           "default": "http://localhost:3080",
           "description": "禅道地址"
         },
-        "requirement-helper.zentao.token": {
-          "order": 1,
-          "type": "string",
-          "description": "禅道Token，当你填写此行信息时，不需要额外填写登录名和密码"
-        },
         "requirement-helper.zentao.account": {
-          "order": 2,
+          "order": 3,
           "type": "string",
           "default": "admin",
           "description": "禅道登录用户名"
         },
         "requirement-helper.zentao.pwd": {
-          "order": 3,
+          "order": 4,
           "type": "string",
-          "default": "*¥B114514y",
+          "default": "#3Devops*",
           "description": "禅道登录密码"
         }
       }
