@@ -1,4 +1,4 @@
-export interface OpenedBy {
+interface OpenedBy {
   id: number;
   account: string;
   avatar: string;

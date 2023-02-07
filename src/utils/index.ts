@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
-import { NAVIGATE_TO_CONFIGURATION } from '../enums/tips';
 import { EXTENSION_FLAG } from '../enums/const';
 import type { MessageType, PlatformBaseSetting } from '../types/common';
+
+export const NAVIGATE_TO_CONFIGURATION = '前往配置';
 
 export const openExtensionSetting = (ext: string | null | undefined) => { 
   let options = EXTENSION_FLAG;
@@ -91,7 +92,6 @@ export const transToJson = (maybeJSON: string) => {
   try { 
     return JSON.parse(maybeJSON);
   } catch (e) { 
-    console.log('transToJson err - ', e);
     return maybeJSON;
   }
 };

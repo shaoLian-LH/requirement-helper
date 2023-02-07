@@ -4,7 +4,7 @@ import { scanText } from './utils/scanner';
 import { subscribeDisposables } from './utils';
 import { addDiagnosticsForCollection, highlightRequirementArea } from './utils/decoration';
 import { fillTagInfosFromServer, updateTagInfos } from './utils/tagOperations';
-import { getDefaultConnector } from './connector/utils';
+import { getDefaultConnector } from './connector';
 
 export const addRequirementDiagnostics = (context: vscode.ExtensionContext) => { 
 	const requirementDiagnostics = vscode.languages.createDiagnosticCollection("requirementDiagnostics");

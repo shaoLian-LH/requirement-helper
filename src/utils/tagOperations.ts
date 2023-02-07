@@ -1,5 +1,5 @@
-import { TaskDetail } from './../connector/zentao/service/tasks.d';
-import { getTaskInfo } from "../connector/zentao/service/tasks";
+import { getDefaultConnector } from "../connector";
+import { TaskDetail } from "../connector/zentao/zentao";
 import type { PressedRequirementInfo, Requirement } from "../types/connector";
 import { SimpleStore } from "./store";
 
@@ -30,6 +30,7 @@ export const fillTagInfosFromServer = async (
   if (isRequesting) { return []; }
 
   store.setGlobalValue('requesting', true);
+  const connector = getDefaultConnector();
   const requestArr = requirements
     .filter(requirement => {
       const { type, id } = requirement;
@@ -38,7 +39,7 @@ export const fillTagInfosFromServer = async (
       if (!(['task'].includes(type))) { return false; }
       return true;
     })
-    .map(requirement => getTaskInfo(requirement.id));
+    .map(requirement => connector.getTaskInfo(requirement.id));
 
   const requestRes = await Promise.all(requestArr)
     .then(results => {
@@ -46,14 +47,12 @@ export const fillTagInfosFromServer = async (
         return result && result.id;
       });
       return successRes;
-    }).catch((err) => {
-      console.log('err - ', err);
+    }).catch(() => {
       return [];
     }) as TaskDetail[];
 
   const pressedTaskInfos = requestRes.map((requestRes) => {
     const { id, name, desc, storySpec } = requestRes;
-    console.log('requestRes - ', requestRes);
     const taskRequirementSetting = requirements.find(rq => String(rq.id) === String(id)) as Requirement;
 
     return {

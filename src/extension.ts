@@ -5,7 +5,7 @@ import { EXTENSION_FLAG } from './enums/const';
 import { SimpleStore } from './utils/store';
 import { getExtensionConfiguration, commandRegister, showInfoWithBtn } from './utils';
 import { addRequirementDiagnostics, addSaveScanner } from './initial';
-import { getDefaultConnector } from './connector/utils';
+import { getDefaultConnector } from './connector';
 
 export function activate(context: vscode.ExtensionContext) {
 	const defaultPlatformConnector = getDefaultConnector();
@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
 				const isValid = defaultPlatformConnector.updateAllSetting(platformInfo, userInfo);
 				if (!isValid) { return; }
 				store.reset();
-				defaultPlatformConnector.connect();
+				defaultPlatformConnector.resetState();
 			}
 		});
 

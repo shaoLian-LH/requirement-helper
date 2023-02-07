@@ -1,1 +1,0 @@
-export const NAVIGATE_TO_CONFIGURATION = '前往配置';

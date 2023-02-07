@@ -1,6 +1,7 @@
+import type { RequestArtifactory } from './index.d';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
-import { Agent } from 'https';
+import { Agent as HttpsAgent } from 'https';
 
 
 const makeGet = <O = any, D = any>(request: AxiosInstance, url: string, params: D, options?: AxiosRequestConfig) => { 
@@ -25,13 +26,13 @@ export const requestFactory = (
     request?: (req: AxiosRequestConfig) => AxiosRequestConfig | any,
     response?: (resp: AxiosResponse | any) => any
   }
-) => { 
+): RequestArtifactory => { 
   const instance = axios.create({
     timeout: 3000 * 10,
     responseType: 'json',
     baseURL: (baseUrl || '').replace(/(\/)*$/, ''),
     proxy: false,
-    httpsAgent: new Agent({ rejectUnauthorized: false })
+    httpsAgent: new HttpsAgent({ rejectUnauthorized: false })
   });
 
   instance.interceptors.response.use((resp) => { 
