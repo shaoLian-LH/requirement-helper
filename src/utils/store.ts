@@ -1,4 +1,3 @@
-import { Requirement } from '../types/connector';
 import { get, set } from 'lodash';
 
 export class SimpleStore { 
@@ -37,19 +36,6 @@ export class SimpleStore {
   getValue(key: string, scope: string | undefined = this._defaultScope) { 
     let targetKey = scope ? `${scope}.${key}` : key;
     return get(this._store, targetKey);
-  }
-
-  updateTagInfos(requirements: Requirement[]) {
-    const rangeSettings: Requirement[] = [];
-    requirements.forEach(setting => { 
-      const { type, id } = setting;
-      const hasExisted = this.getValue(`${type}.${id}`);
-      if (hasExisted) { return; }
-      this.setValue(`${type}.${id}`, {});
-      // TODO: 这个地方应该做一层比对，节点位置会发生改变，此时应该通知其他模块产生了什么变化
-      rangeSettings.push(setting);
-    });
-    return rangeSettings;
   }
 
   reset() { 

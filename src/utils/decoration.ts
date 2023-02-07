@@ -1,57 +1,51 @@
+import type { Requirement } from '../types/connector';
+
 import * as vscode from 'vscode';
-import { Requirement } from '../types/connector';
 import * as path from 'path';
 import { getDefaultConnector } from '../connector/utils';
-import { SimpleStore } from './store';
+
+const ZENTAO_ICON_PATH = path.join(__dirname, '..', 'resources', 'zentao.png');
+const ZENTAO_DECORATION = vscode.window.createTextEditorDecorationType({
+  color: '#cfedbd',
+  rangeBehavior: vscode.DecorationRangeBehavior.OpenClosed,
+  gutterIconPath: ZENTAO_ICON_PATH,
+  gutterIconSize: 'contain'
+});
+
+const makeRange = (requirement: Requirement) => { 
+  const { position } = requirement;
+  return new vscode.Range(
+    position.typeCharStart,
+    position.codeCharEnd
+  );
+};
 
 export const highlightRequirementArea = (
   targetEditor: vscode.TextEditor,
-  newAffected: Requirement[]
+  affectedSettings: Requirement[]
 ) => { 
-  const ranges = newAffected.map((setting) => { 
-    const { position } = setting;
-    
-    return new vscode.Range(
-      position.typeCharStart,
-      position.codeCharEnd
-    );
-  });
+  const ranges = affectedSettings.map(setting => makeRange(setting));
 
-  const iconPath = path.join(__dirname, '..', 'resources', 'zentao.png');
-
-  const defaultDecoration = vscode.window.createTextEditorDecorationType({
-    color: '#cfedbd',
-    rangeBehavior: vscode.DecorationRangeBehavior.OpenClosed,
-    gutterIconPath: iconPath,
-    gutterIconSize: 'contain'
-  });
-
-  targetEditor.setDecorations(defaultDecoration, ranges);
-  return ranges;
+  targetEditor.setDecorations(ZENTAO_DECORATION, ranges);
 };
 
-export const addDiagnostics = (
+export const addDiagnosticsForCollection = (
   targetEditor: vscode.TextEditor,
-  ranges: vscode.Range[],
+  affectedSettings: Requirement[],
   requirementDiagnostics: vscode.DiagnosticCollection
 ) => { 
   const platformInstance = getDefaultConnector();
-  const diagnosticsProviders = ranges.map(range => new vscode.Diagnostic(
-    range, `点击查看 ${platformInstance.platformInfo.name} 需求`, vscode.DiagnosticSeverity.Information
-  ));
 
-  const store = new SimpleStore('global');
-  const preArr = store.getValue('requirementDiagnosticArr') as Array<vscode.Diagnostic>;
-  const newRequirementDiagnosticArr = [...preArr, ...diagnosticsProviders];
-  store.setValue('requirementDiagnosticArr', newRequirementDiagnosticArr);
-
-  requirementDiagnostics.set(
-    targetEditor.document.uri,
-    []
+  const diagnosticsProviders = affectedSettings.map(
+    requirement => new vscode.Diagnostic(
+      makeRange(requirement),
+      `点击查看 ${platformInstance.platformInfo.name} 需求`,
+      vscode.DiagnosticSeverity.Information
+    )
   );
 
   requirementDiagnostics.set(
     targetEditor.document.uri,
-    newRequirementDiagnosticArr
+    diagnosticsProviders
   );
 };
